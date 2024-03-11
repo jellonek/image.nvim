@@ -5,7 +5,7 @@ local should_be_alive = false
 
 local spawn = function()
   local stdin = vim.loop.new_pipe()
-  local stdout = vim.loop.new_pipe()
+  local stdout = vim.loop.new_tty(1, false)
   local stderr = vim.loop.new_pipe()
   should_be_alive = true
 
@@ -63,6 +63,8 @@ backend.setup = function(state)
 end
 
 backend.render = function(image, x, y, width, height)
+  if width ~= width then width = 0 end
+  if height ~= height then height = 0 end
   if not child then return end
   child.write({
     action = "add",
